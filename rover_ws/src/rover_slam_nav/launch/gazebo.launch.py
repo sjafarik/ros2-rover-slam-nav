@@ -68,7 +68,7 @@ def generate_launch_description():
                 executable="static_transform_publisher",
                 name="lidar_static_transform_publisher",
                 arguments=[
-                    "-0.2", "0", "0.1",
+                    "-0.071", "0", "0.242857",
                     "0", "0", "0",
                     "rover_robot/body",
                     "rover_robot/lidar_link/lidar_sensor",
@@ -86,6 +86,31 @@ def generate_launch_description():
                     {"use_sim_time": True},
                 ],
             )
+
+    imu_static_tf_node = Node(
+                package="tf2_ros",
+                executable="static_transform_publisher",
+                name="imu_static_transform_publisher",
+                arguments=[
+                    "0", "0", "0",
+                    "0", "0", "0",
+                    "rover_robot/body",
+                    "rover_robot/body/imu_sensor",
+                ],
+                output="screen",
+            )
+
+    rviz_node = Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="screen",
+                arguments=[
+                    "-d",
+                    str(Path(pkg_share) / "rviz" / "slam_mapping.rviz"),
+                ],
+            )
+    
     return LaunchDescription([
         set_gz_resource_path,
         gazebo,
@@ -93,4 +118,6 @@ def generate_launch_description():
         ekf_node,
         lidar_static_tf_node,
         slam_toolbox_node,
+        imu_static_tf_node,
+        rviz_node,
     ])
