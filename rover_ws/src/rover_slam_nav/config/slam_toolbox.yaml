@@ -1,0 +1,9 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+    mode: mapping
+
+    odom_frame: rover_robot/odom
+    map_frame: map
+    base_frame: rover_robot/body
+    scan_topic: /scan

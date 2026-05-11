@@ -62,10 +62,35 @@ def generate_launch_description():
                     {"use_sim_time": True},
                 ],
             )
+    
+    lidar_static_tf_node = Node(
+                package="tf2_ros",
+                executable="static_transform_publisher",
+                name="lidar_static_transform_publisher",
+                arguments=[
+                    "-0.2", "0", "0.1",
+                    "0", "0", "0",
+                    "rover_robot/body",
+                    "rover_robot/lidar_link/lidar_sensor",
+                ],
+                output="screen",
+            )
 
+    slam_toolbox_node = Node(
+                package="slam_toolbox",
+                executable="async_slam_toolbox_node",
+                name="slam_toolbox",
+                output="screen",
+                parameters=[
+                    str(Path(pkg_share) / "config" / "slam_toolbox.yaml"),
+                    {"use_sim_time": True},
+                ],
+            )
     return LaunchDescription([
         set_gz_resource_path,
         gazebo,
         bridge,
         ekf_node,
+        lidar_static_tf_node,
+        slam_toolbox_node,
     ])
